@@ -1,4 +1,4 @@
-const API_BASE = window.ATS_API_BASE || "http://localhost:8000";
+const API_BASE = window.ATS_API_BASE || "https://ats-score-check-n53u.onrender.com";
 
 const form = document.getElementById("ats-form");
 const scanBtn = document.getElementById("scan-btn");
@@ -107,9 +107,9 @@ form.addEventListener("submit", async (e) => {
   startScanCopy();
 
   try {
-    const res = await fetch(`${API_BASE}/api/analyze`, {
-      method: "POST",
-      body: formData,
+    const res = await fetch("https://ats-score-check-n53u.onrender.com/api/analyze", {
+    method: "POST",
+    body: formData,
     });
     const data = await res.json();
     if (!res.ok) {
