@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scanline — Resume ATS Checker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grain"></div>
+
+<header class="topbar">
+  <div class="wordmark">
+    <span class="wordmark-icon">▮▮▯</span>
+    Scanline
+  </div>
+  <div class="topbar-tag">ATS resume &amp; job-match scanner</div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <p class="eyebrow">/ machine-readable, human-approved</p>
+    <h1>Will your resume clear<br>the bot before a human sees it?</h1>
+    <p class="hero-sub">Drop in your resume and the job description. We run the same
+      keyword pass an ATS would, then hand back a score, what's missing, and
+      exactly what to add.</p>
+  </section>
+
+  <section class="console" id="console">
+
+    <form id="ats-form" class="console-grid">
+
+      <div class="pane pane-resume">
+        <div class="pane-head">
+          <span class="pane-index">01</span>
+          <h2>Resume</h2>
+          <div class="mode-switch" role="tablist">
+            <button type="button" class="mode-btn is-active" data-mode="file" role="tab">Upload PDF</button>
+            <button type="button" class="mode-btn" data-mode="text" role="tab">Paste text</button>
+          </div>
+        </div>
+
+        <label class="dropzone" id="dropzone" for="resume-file">
+          <input type="file" id="resume-file" name="resume_file" accept="application/pdf" hidden>
+          <div class="dropzone-inner">
+            <div class="doc-icon" aria-hidden="true">
+              <div class="doc-line"></div>
+              <div class="doc-line"></div>
+              <div class="doc-line short"></div>
+            </div>
+            <p class="dropzone-label" id="dropzone-label">Drag a PDF here, or click to browse</p>
+            <p class="dropzone-hint">.pdf up to 10MB</p>
+          </div>
+        </label>
+
+        <textarea class="resume-textarea" id="resume-text" name="resume_text"
+          placeholder="…or paste your resume text here" hidden></textarea>
+      </div>
+
+      <div class="pane pane-jd">
+        <div class="pane-head">
+          <span class="pane-index">02</span>
+          <h2>Job description</h2>
+        </div>
+        <textarea class="jd-textarea" id="job-description" name="job_description"
+          placeholder="Paste the job posting — the more complete, the better the keyword match." required></textarea>
+      </div>
+
+    </form>
+
+    <div class="scan-row">
+      <button type="submit" form="ats-form" class="scan-btn" id="scan-btn">
+        <span class="scan-btn-label">Run scan</span>
+        <span class="scan-btn-arrow">→</span>
+      </button>
+      <p class="scan-status" id="scan-status">Two inputs required: resume + job description.</p>
+    </div>
+
+    <!-- Scan overlay: the signature moment -->
+    <div class="scan-overlay" id="scan-overlay" hidden>
+      <div class="scan-doc">
+        <div class="scan-doc-line" style="width:78%"></div>
+        <div class="scan-doc-line" style="width:92%"></div>
+        <div class="scan-doc-line" style="width:65%"></div>
+        <div class="scan-doc-line" style="width:88%"></div>
+        <div class="scan-doc-line" style="width:71%"></div>
+        <div class="scan-doc-line" style="width:95%"></div>
+        <div class="scan-doc-line" style="width:60%"></div>
+        <div class="scan-doc-line" style="width:83%"></div>
+        <div class="scan-laser"></div>
+      </div>
+      <p class="scan-overlay-text" id="scan-overlay-text">Reading resume…</p>
+    </div>
+
+  </section>
+
+  <section class="results" id="results" hidden>
+
+    <div class="result-top">
+      <div class="gauge-wrap">
+        <svg class="gauge" viewBox="0 0 160 160">
+          <circle class="gauge-track" cx="80" cy="80" r="70"></circle>
+          <circle class="gauge-fill" id="gauge-fill" cx="80" cy="80" r="70"></circle>
+        </svg>
+        <div class="gauge-center">
+          <span class="gauge-score" id="gauge-score">0</span>
+          <span class="gauge-max">/100</span>
+        </div>
+      </div>
+      <div class="result-summary">
+        <p class="pane-index">03 — verdict</p>
+        <p class="result-summary-text" id="result-summary-text"></p>
+      </div>
+    </div>
+
+    <div class="keyword-cols">
+      <div class="keyword-col">
+        <h3><span class="dot dot-match"></span> Matched keywords <span class="count" id="matched-count">0</span></h3>
+        <div class="chip-row" id="matched-keywords"></div>
+      </div>
+      <div class="keyword-col">
+        <h3><span class="dot dot-miss"></span> Missing keywords <span class="count" id="missing-count">0</span></h3>
+        <div class="chip-row" id="missing-keywords"></div>
+      </div>
+    </div>
+
+    <div class="suggestions">
+      <h3>Suggested fixes</h3>
+      <ol class="suggestion-list" id="suggestion-list"></ol>
+    </div>
+
+  </section>
+
+  <section class="error-box" id="error-box" hidden>
+    <p id="error-text"></p>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <span>Scanline — runs locally against your own API key. Nothing is stored.</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
